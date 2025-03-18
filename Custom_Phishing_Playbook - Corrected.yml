@@ -1,0 +1,1534 @@
+id: b61e72c6-73cd-456a-868e-f61906873246
+version: 3
+vcShouldKeepItemLegacyProdMachine: false
+name: Custom Phishing Playbook
+starttaskid: "0"
+tasks:
+  "0":
+    id: "0"
+    taskid: 3fa456fe-3507-4945-8e5d-3749c664361c
+    type: start
+    task:
+      id: 3fa456fe-3507-4945-8e5d-3749c664361c
+      version: -1
+      name: ""
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "1"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 50
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+  "1":
+    id: "1"
+    taskid: 40e75262-9caf-4c32-8122-bf0c13d52c1d
+    type: condition
+    task:
+      id: 40e75262-9caf-4c32-8122-bf0c13d52c1d
+      version: -1
+      name: Is there a zip file ?
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#default#':
+      - "6"
+      "yes":
+      - "2"
+    separatecontext: false
+    conditions:
+    - label: "yes"
+      condition:
+      - - operator: isEqualString
+          left:
+            value:
+              complex:
+                root: File
+                filters:
+                - - operator: isEqualString
+                    left:
+                      value:
+                        simple: File.Extension
+                      iscontext: true
+                    right:
+                      value:
+                        simple: zip
+                  - operator: isEqualString
+                    left:
+                      value:
+                        simple: File.Extension
+                      iscontext: true
+                    right:
+                      value:
+                        simple: ZIP
+                accessor: Extension
+                transformers:
+                - operator: toUpperCase
+            iscontext: true
+          right:
+            value:
+              simple: ZIP
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 195
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+  "2":
+    id: "2"
+    taskid: 682c6fff-ea5b-41e9-87a0-5ce6b1059d95
+    type: regular
+    task:
+      id: 682c6fff-ea5b-41e9-87a0-5ce6b1059d95
+      version: -1
+      name: Unzip File
+      description: Unzip a file using fileName or entryID to specify a file. Unzipped
+        files will be loaded to the War Room and names will be put into the context.
+      scriptName: UnzipFile
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "6"
+    scriptarguments:
+      entryID:
+        complex:
+          root: File
+          filters:
+          - - operator: isEqualString
+              left:
+                value:
+                  simple: File.Extension
+                iscontext: true
+              right:
+                value:
+                  simple: zip
+              ignorecase: true
+            - operator: isEqualString
+              left:
+                value:
+                  simple: File.Extension
+                iscontext: true
+              right:
+                value:
+                  simple: ZIP
+          accessor: EntryID
+      fileName: {}
+      lastZipFileInWarroom: {}
+      password:
+        simple: '{TOMMED}W7qzAyAMRvzJoLl9fp+8Dax+VS27vnz3OJMO9dCHlkNkNYHUfF3QbK+efn2eOIgUJN4xJYIthzQbQGlOWKgKMZ4Ejf0a9bFpoQP6E3TtSs/PK7MQvLJga5AHivHybTv5k/dffYub55uBuaLsiXpbZXced3CKDASW1UCgEsS+UME129/ncKwKcLY6baoHHMqXz9KhJTpERM9BQ3+orC6opg=='
+      zipTool: {}
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 797.5,
+          "y": 370
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+  "5":
+    id: "5"
+    taskid: 1669d279-54e7-4e8e-87e8-b4ac095016f1
+    type: title
+    task:
+      id: 1669d279-54e7-4e8e-87e8-b4ac095016f1
+      version: -1
+      name: End of Playbook
+      type: title
+      iscommand: false
+      brand: ""
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 3285
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+  "6":
+    id: "6"
+    taskid: cbc48a60-d177-4f66-8eab-017980662850
+    type: condition
+    task:
+      id: cbc48a60-d177-4f66-8eab-017980662850
+      version: -1
+      name: Is there an email file ?
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#default#':
+      - "30"
+      "yes":
+      - "7"
+    separatecontext: false
+    conditions:
+    - label: "yes"
+      condition:
+      - - operator: isEqualString
+          left:
+            value:
+              complex:
+                root: File
+                accessor: Extension
+                transformers:
+                - operator: toUpperCase
+            iscontext: true
+          right:
+            value:
+              simple: EML
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 545
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+  "7":
+    id: "7"
+    taskid: afba68d3-cb8b-453c-8b58-c03247e5cf37
+    type: regular
+    task:
+      id: afba68d3-cb8b-453c-8b58-c03247e5cf37
+      version: -1
+      name: Parse Email File
+      description: Parse an email from an eml or msg file and populate all relevant
+        context data to investigate the email. Also extracts inner attachments and
+        returns them to the war room. The incident labels themselves are preserved
+        and not modified - only the "Label/x" context items that originated from the
+        labels, and the best practice is to rely on these for the remainder of the
+        playbook.
+      scriptName: ParseEmailFiles
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "30"
+    scriptarguments:
+      entryid:
+        complex:
+          root: File
+          filters:
+          - - operator: isEqualString
+              left:
+                value:
+                  simple: File.Extension
+                iscontext: true
+              right:
+                value:
+                  simple: eml
+          accessor: EntryID
+      max_depth: {}
+      parse_only_headers: {}
+    results:
+    - AttachmentName
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 797.5,
+          "y": 720
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    fieldMapping:
+    - incidentfield: Email To
+      output:
+        simple: ${Email.To}
+    - incidentfield: Email From
+      output:
+        simple: ${Email.From}
+    - incidentfield: Email Subject
+      output:
+        simple: ${Email.Subject}
+    - incidentfield: Email Body
+      output:
+        simple: ${Email.Text}
+    skipunavailable: false
+    quietmode: 0
+  "12":
+    id: "12"
+    taskid: 70462bfc-e035-4d52-8c9e-d13796028ccb
+    type: regular
+    task:
+      id: 70462bfc-e035-4d52-8c9e-d13796028ccb
+      version: -1
+      name: Extract Indicators Word
+      description: |-
+        Used to extract indicators from Word files (DOC, DOCX).
+        The script does not extract data from macros (e.g., embedded code).
+      scriptName: ExtractIndicatorsFromWordFile
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "31"
+    scriptarguments:
+      entryID:
+        complex:
+          root: File
+          filters:
+          - - operator: isEqualString
+              left:
+                value:
+                  simple: File.Extension
+                iscontext: true
+              right:
+                value:
+                  simple: doc
+            - operator: isEqualString
+              left:
+                value:
+                  simple: File.Extension
+                iscontext: true
+              right:
+                value:
+                  simple: DOC
+            - operator: isEqualString
+              left:
+                value:
+                  simple: File.Extension
+                iscontext: true
+              right:
+                value:
+                  simple: docx
+            - operator: isEqualString
+              left:
+                value:
+                  simple: File.Extension
+                iscontext: true
+              right:
+                value:
+                  simple: DOCX
+          accessor: EntryID
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 1400
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+  "13":
+    id: "13"
+    taskid: edcb6d24-bfd5-4a01-8a33-1acb8207cd52
+    type: regular
+    task:
+      id: edcb6d24-bfd5-4a01-8a33-1acb8207cd52
+      version: -1
+      name: Enrich URLs
+      description: A context script for URL entities
+      scriptName: URLReputation
+      type: regular
+      iscommand: false
+      brand: Builtin
+    nexttasks:
+      '#none#':
+      - "27"
+    scriptarguments:
+      url:
+        simple: ${ExtractedIndicators.URL}
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 797.5,
+          "y": 2060
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+  "14":
+    id: "14"
+    taskid: cdc03c00-b5f2-4cf2-88fe-2242b9212e37
+    type: condition
+    task:
+      id: cdc03c00-b5f2-4cf2-88fe-2242b9212e37
+      version: -1
+      name: Are there attachments or other file than email ?
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#default#':
+      - "21"
+      ELF File:
+      - "19"
+      PDF File:
+      - "18"
+      Unknown File:
+      - "25"
+      Word File:
+      - "17"
+    separatecontext: false
+    conditions:
+    - label: Word File
+      condition:
+      - - operator: isEqualString
+          left:
+            value:
+              complex:
+                root: File
+                accessor: Extension
+                transformers:
+                - operator: toUpperCase
+            iscontext: true
+          right:
+            value:
+              simple: DOC
+        - operator: isEqualString
+          left:
+            value:
+              complex:
+                root: File
+                accessor: Extension
+                transformers:
+                - operator: toUpperCase
+            iscontext: true
+          right:
+            value:
+              simple: DOCX
+    - label: PDF File
+      condition:
+      - - operator: isEqualString
+          left:
+            value:
+              complex:
+                root: File
+                accessor: Extension
+                transformers:
+                - operator: toUpperCase
+            iscontext: true
+          right:
+            value:
+              simple: PDF
+    - label: ELF File
+      condition:
+      - - operator: isEqualString
+          left:
+            value:
+              complex:
+                root: File
+                filters:
+                - - operator: isEqualString
+                    left:
+                      value:
+                        simple: File.Extension
+                      iscontext: true
+                    right:
+                      value:
+                        simple: ELF
+                  - operator: isEqualString
+                    left:
+                      value:
+                        simple: File.Extension
+                      iscontext: true
+                    right:
+                      value:
+                        simple: elf
+                accessor: Extension
+                transformers:
+                - operator: toUpperCase
+            iscontext: true
+          right:
+            value:
+              simple: ELF
+    - label: Unknown File
+      condition:
+      - - operator: notInList
+          left:
+            value:
+              simple: File.Extension
+            iscontext: true
+          right:
+            value:
+              simple: elf,doc,docx,DOC,DOCX,pdf,PDF,
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 1040
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+  "15":
+    id: "15"
+    taskid: 4a58b612-dcef-4562-8f7b-fcf92c77f3c9
+    type: regular
+    task:
+      id: 4a58b612-dcef-4562-8f7b-fcf92c77f3c9
+      version: -1
+      name: Extract Indicators PDF
+      description: commands.local.cmd.extract.indicators
+      script: Builtin|||extractIndicators
+      type: regular
+      iscommand: true
+      brand: Builtin
+    nexttasks:
+      '#none#':
+      - "31"
+    scriptarguments:
+      entryID:
+        complex:
+          root: File
+          filters:
+          - - operator: isEqualString
+              left:
+                value:
+                  simple: File.Extension
+                iscontext: true
+              right:
+                value:
+                  simple: pdf
+            - operator: isEqualString
+              left:
+                value:
+                  simple: File.Extension
+                iscontext: true
+              right:
+                value:
+                  simple: PDF
+          accessor: EntryID
+      filePath: {}
+      investigationID: {}
+      text: {}
+      using:
+        simple: InnerServicesModule
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 1390
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+  "17":
+    id: "17"
+    taskid: d80626db-f1ed-422f-8e91-e02e9a7d0e50
+    type: regular
+    task:
+      id: d80626db-f1ed-422f-8e91-e02e9a7d0e50
+      version: -1
+      name: Parse Word
+      description: Takes an input docx file (entryID) as an input and saves an output
+        text file (file entry) with the original file's contents.
+      scriptName: ParseWordDoc
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "12"
+    scriptarguments:
+      entryID:
+        complex:
+          root: File
+          filters:
+          - - operator: isEqualString
+              left:
+                value:
+                  simple: File.Extension
+                iscontext: true
+              right:
+                value:
+                  simple: doc
+            - operator: isEqualString
+              left:
+                value:
+                  simple: File.Extension
+                iscontext: true
+              right:
+                value:
+                  simple: DOC
+            - operator: isEqualString
+              left:
+                value:
+                  simple: File.Extension
+                iscontext: true
+              right:
+                value:
+                  simple: docx
+            - operator: isEqualString
+              left:
+                value:
+                  simple: File.Extension
+                iscontext: true
+              right:
+                value:
+                  simple: DOCX
+          accessor: EntryID
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 1215
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+  "18":
+    id: "18"
+    taskid: 41e53a04-0528-4ee4-8ecd-e3b0ffab5697
+    type: regular
+    task:
+      id: 41e53a04-0528-4ee4-8ecd-e3b0ffab5697
+      version: -1
+      name: Parse PDF
+      description: Load a PDF file's content and metadata into context.
+      scriptName: ReadPDFFileV2
+      type: regular
+      iscommand: false
+      brand: Builtin
+    nexttasks:
+      '#none#':
+      - "15"
+    scriptarguments:
+      entryID:
+        complex:
+          root: File
+          filters:
+          - - operator: isEqualString
+              left:
+                value:
+                  simple: File.Extension
+                iscontext: true
+              right:
+                value:
+                  simple: pdf
+            - operator: isEqualString
+              left:
+                value:
+                  simple: File.Extension
+                iscontext: true
+              right:
+                value:
+                  simple: PDF
+          accessor: EntryID
+      maxImages: {}
+      userPassword: {}
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 1215
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+  "19":
+    id: "19"
+    taskid: aa7df809-49be-46df-8200-430f59c8609a
+    type: regular
+    task:
+      id: aa7df809-49be-46df-8200-430f59c8609a
+      version: -1
+      name: Open New Incident
+      description: commands.local.cmd.create.inc
+      script: Builtin|||createNewIncident
+      type: regular
+      iscommand: true
+      brand: Builtin
+    nexttasks:
+      '#none#':
+      - "31"
+    scriptarguments:
+      accountgroups: {}
+      accountid: {}
+      accountinformationbreached: {}
+      accountname: {}
+      activedirectoryaccountstatus: {}
+      activedirectorydisplayname: {}
+      activedirectorypasswordstatus: {}
+      affecteddata: {}
+      affecteddatatype: {}
+      affectedindividualscontactinformation: {}
+      agentid: {}
+      app: {}
+      approximatenumberofaffecteddatasubjects: {}
+      assetid: {}
+      associatedmaliciousdomains: {}
+      attachmentcount: {}
+      attachmentextension: {}
+      attachmenthash: {}
+      attachmentid: {}
+      attachmentname: {}
+      attachmentsize: {}
+      attachmenttype: {}
+      attackerhostisolated: {}
+      attackeripblocked: {}
+      blockedaction: {}
+      bugtraq: {}
+      champtest: {}
+      city: {}
+      clarotyalertresolved: {}
+      clarotyalerttype: {}
+      clarotycategory: {}
+      clarotynetworkid: {}
+      clarotyrelatedassets: {}
+      clarotyresourceid: {}
+      clarotysiteid: {}
+      code42alerttype: {}
+      code42fileevents: {}
+      commandline: {}
+      companyaddress: {}
+      companycity: {}
+      companycountry: {}
+      companyhasinsuranceforthebreach: {}
+      companyname: {}
+      companypostalcode: {}
+      companypropertystatus: {}
+      contactaddress: {}
+      contactemailaddress: {}
+      contactname: {}
+      contacttelephonenumber: {}
+      coordinates: {}
+      country: {}
+      countrywherebusinesshasitsmainestablishment: {}
+      countrywherethebreachtookplace: {}
+      criticalassets: {}
+      customFields: {}
+      cve: {}
+      cvss: {}
+      cymulateimmediatethreatsattackid: {}
+      cymulateimmediatethreatsfiletype: {}
+      cymulateimmediatethreatsid: {}
+      cymulateimmediatethreatsmitigations: {}
+      cymulateimmediatethreatsmodule: {}
+      cymulateimmediatethreatspayloadname: {}
+      cymulateimmediatethreatsstatus: {}
+      cymulateimmediatethreatsvector: {}
+      dataencryptionstatus: {}
+      datetimeofthebreach: {}
+      dbotprediction: {}
+      dbotpredictionprobability: {}
+      dbottextsuggestionhighlighted: {}
+      dest: {}
+      desthostname: {}
+      destinationip: {}
+      destinationports: {}
+      destntdomain: {}
+      destos: {}
+      details:
+        simple: Executable File ${File.Name} found during Phishing investigation
+      detectionendtime: {}
+      detectionid: {}
+      detectionticketed: {}
+      detectionupdatetime: {}
+      detectionurl: {}
+      devicegsuiteaccountstatus: {}
+      devicename: {}
+      digitalguardianactivity: {}
+      digitalguardianalarmname: {}
+      digitalguardianarcuid: {}
+      digitalguardianattachmentfilename: {}
+      digitalguardianclassification: {}
+      digitalguardiancommandline: {}
+      digitalguardiancomputername: {}
+      digitalguardiandestinationaddress: {}
+      digitalguardiandestinationdnsdomain: {}
+      digitalguardianemailrecipient: {}
+      digitalguardianemailsender: {}
+      digitalguardianemailsubject: {}
+      digitalguardianfilename: {}
+      digitalguardianparentprocessname: {}
+      digitalguardianpolicy: {}
+      digitalguardianprocessname: {}
+      digitalguardianremoteport: {}
+      digitalguardiansensitivity: {}
+      digitalguardiansourceaddress: {}
+      digitalguardiansourceip: {}
+      digitalguardianthreattype: {}
+      digitalguardianusername: {}
+      dpoemailaddress: {}
+      duoaccountstatus: {}
+      duration: {}
+      emailaddress: {}
+      emailauthenticitycheck: {}
+      emailautoreply: {}
+      emailbcc: {}
+      emailbody: {}
+      emailbodyformat: {}
+      emailbodyhtml: {}
+      emailcc: {}
+      emailclassification: {}
+      emailclientname: {}
+      emailfrom: {}
+      emailheaders: {}
+      emailhtml: {}
+      emailinreplyto: {}
+      emailkeywords: {}
+      emailmessageid: {}
+      emailreceived: {}
+      emailreplyto: {}
+      emailreturnpath: {}
+      emailsenderip: {}
+      emailsize: {}
+      emailsource: {}
+      emailsubject: {}
+      emailto: {}
+      emailtocount: {}
+      emailurlclicked: {}
+      employeedisplayname: {}
+      employeeemail: {}
+      employeemanageremail: {}
+      entryIDs: {}
+      exactlywhathappenedandatwhattimes: {}
+      exfiltratedfiles: {}
+      expanseexposuretype: {}
+      expanserawjsonevent: {}
+      expanseseverity: {}
+      extrahopapplianceid: {}
+      extrahophostname: {}
+      filehash: {}
+      filehashblocked: {}
+      filename: {}
+      filepath: {}
+      filesize: {}
+      financialinformationbreached: {}
+      firstseen: {}
+      globaldirectoryvisibility: {}
+      googleaccountstatus: {}
+      googleadminrolesstatus: {}
+      googledisplayname: {}
+      googledrivestatus: {}
+      googlemailstatus: {}
+      googlepasswordstatus: {}
+      healthinsurancebreached: {}
+      helloworldid: {}
+      helloworldstatus: {}
+      helloworldtype: {}
+      hostname: {}
+      howcouldinformationsharingwithotherorganizationshavebeenimproved: {}
+      howwastheincidentcontainedanderadicated: {}
+      howwelldidstaffandmanagementperformindealingwiththeincidentwerethedocumentedproceduresfollowedweretheyadequate: {}
+      illusionblackattackerid: {}
+      illusionblackattacktype: {}
+      illusionblackdecoyid: {}
+      illusionblackevents: {}
+      illusionblackthreatparse: {}
+      illusivenetworkshasforensics: {}
+      illusivenetworkshostname: {}
+      illusivenetworksid: {}
+      illusivenetworkslastseenuser: {}
+      illusivenetworkssourceoperatingsystem: {}
+      illusivenetworksstepstocrownjewel: {}
+      illusivenetworksstepstodomainadmin: {}
+      indenideviceid: {}
+      indeniissueid: {}
+      infectedhostnames: {}
+      infectedhosts: {}
+      investigationstage: {}
+      isolated: {}
+      isthedatasubjecttodpia: {}
+      labels: {}
+      lastmodifiedby: {}
+      lastmodifiedon: {}
+      lastseen: {}
+      likelyimpact: {}
+      loginattemptcount: {}
+      logzioalerteventid: {}
+      logzioalertid: {}
+      logzioalertsummary: {}
+      logziotags: {}
+      macaddress: {}
+      mailboxdelegation: {}
+      maliciousbehavior: {}
+      maliciouscauseifthecauseisamaliciousattack: {}
+      maliciousdomainsblocked: {}
+      malwarefamily: {}
+      manageremail: {}
+      measurestomitigate: {}
+      medicalinformationbreached: {}
+      name:
+        simple: Executable File ${File.Name} found during Phishing investigation
+      niststage: {}
+      numberofports: {}
+      numberofuniqueports: {}
+      occurred: {}
+      offboardingdate: {}
+      offboardingstage: {}
+      oktaaccountstatus: {}
+      otherpiidatabreached: {}
+      owner: {}
+      parentprocessid: {}
+      participants: {}
+      passwordexpirationstatus: {}
+      penteraoperationdetails: {}
+      phase: {}
+      phishingsubtype: {}
+      pid: {}
+      piidatatype: {}
+      policydeleted: {}
+      policydescription: {}
+      policydetails: {}
+      policyid: {}
+      policyrecommendation: {}
+      policyremediable: {}
+      policyseverity: {}
+      policytype: {}
+      portsblocked: {}
+      possiblecauseofthebreach: {}
+      postalcode: {}
+      previouscoordinates: {}
+      previouscountry: {}
+      previoussignindatetime: {}
+      previoussourceip: {}
+      prismacloudcomputeactivitytype: {}
+      prismacloudcomputeappid: {}
+      prismacloudcomputecategory: {}
+      prismacloudcomputecollections: {}
+      prismacloudcomputecommand: {}
+      prismacloudcomputecontainer: {}
+      prismacloudcomputecredentialid: {}
+      prismacloudcomputedistribution: {}
+      prismacloudcomputeerror: {}
+      prismacloudcomputeforensic: {}
+      prismacloudcomputefqdn: {}
+      prismacloudcomputefunction: {}
+      prismacloudcomputehost: {}
+      prismacloudcomputeimage: {}
+      prismacloudcomputeinteractive: {}
+      prismacloudcomputekubernetesresource: {}
+      prismacloudcomputelabels: {}
+      prismacloudcomputeline: {}
+      prismacloudcomputelogfile: {}
+      prismacloudcomputemarkdown: {}
+      prismacloudcomputemessage: {}
+      prismacloudcomputeproject: {}
+      prismacloudcomputeprotected: {}
+      prismacloudcomputeprovider: {}
+      prismacloudcomputerawalertjson: {}
+      prismacloudcomputeregion: {}
+      prismacloudcomputeregistry: {}
+      prismacloudcomputerule: {}
+      prismacloudcomputeruntime: {}
+      prismacloudcomputeservice: {}
+      prismacloudcomputeservicetype: {}
+      prismacloudcomputetotal: {}
+      prismacloudcomputetype: {}
+      prismacloudcomputeuser: {}
+      prismacloudid: {}
+      prismacloudreason: {}
+      prismacloudrules: {}
+      prismacloudstatus: {}
+      prismacloudtime: {}
+      rating: {}
+      rawparticipants: {}
+      region: {}
+      regionid: {}
+      reporteremailaddress: {}
+      residentnotificationoption: {}
+      residentsemailaddress: {}
+      resourceapiname: {}
+      resourcecloudtype: {}
+      resourceid: {}
+      resourcename: {}
+      resourcetype: {}
+      riskrating: {}
+      riskscore: {}
+      roles: {}
+      rrn: {}
+      safebreachsimulationid: {}
+      samaccountname: {}
+      sansstage: {}
+      scansourcetype: {}
+      sectorofaffectedparty: {}
+      severity: {}
+      signature: {}
+      signindatetime: {}
+      sixgillalertid: {}
+      sixgillcontent: {}
+      sixgillthreatlevel: {}
+      sixgillthreattype: {}
+      sizenumberofemployees: {}
+      sizeturnover: {}
+      skuname: {}
+      skutier: {}
+      sla: {}
+      slaField: {}
+      sourcehostname: {}
+      sourceip: {}
+      sourceusername: {}
+      src: {}
+      srchostname: {}
+      srcntdomain: {}
+      srcos: {}
+      srcuser: {}
+      statewherethebreachtookplace: {}
+      subscriptionassignedby: {}
+      subscriptioncreatedby: {}
+      subscriptioncreatedon: {}
+      subscriptiondescription: {}
+      subscriptionid: {}
+      subscriptionname: {}
+      subscriptiontype: {}
+      subscriptionupdatedby: {}
+      subscriptionupdatedon: {}
+      subtype: {}
+      successfullogin: {}
+      suggestionsanddiscussionofhowtoimprovetheteam: {}
+      systemdefault: {}
+      systems: {}
+      targetfirewallversion: {}
+      telephoneno: {}
+      terminatedaction: {}
+      threatactor: {}
+      trapsid: {}
+      travelmaplink: {}
+      triggeredsecurityprofile: {}
+      type: {}
+      uniquebiometricdatabreached: {}
+      uniqueidentificationnumberbreached: {}
+      urlsslverification: {}
+      user: {}
+      useraccountcontrol: {}
+      userdisabledstatus: {}
+      username: {}
+      vendorid: {}
+      vendorproduct: {}
+      vpcid: {}
+      vulnerabilitycategory: {}
+      wereanystepsoractionstakenthatmighthaveinhibitedtherecovery: {}
+      whatadditionaltoolsorresourcesareneededtodetectanalyzeandmitigatefutureincidents: {}
+      whataretheareasthatneedimprovement: {}
+      whatcorrectiveactionscanpreventsimilarincidentsinthefuture: {}
+      whatinformationwasneededsooner: {}
+      whatprecursorsorindicatorsshouldbewatchedforinthefuturetodetectsimilarincidents: {}
+      whatwasthescopeoftheincident: {}
+      whatwastheworkperformedduringrecovery: {}
+      whatweretheareaswherethecirtteamswereeffective: {}
+      whatwouldthestaffandmanagementdodifferentlythenexttimeasimilarincidentoccurs: {}
+      whenwastheproblemfirstdetectedandbywhom: {}
+      whereisdatahosted: {}
+      xdralertcount: {}
+      xdralerts: {}
+      xdrassigneduseremail: {}
+      xdrassigneduserprettyname: {}
+      xdrdescription: {}
+      xdrdetectiontime: {}
+      xdrfileartifacts: {}
+      xdrhighseverityalertcount: {}
+      xdrhostcount: {}
+      xdrincidentid: {}
+      xdrlowseverityalertcount: {}
+      xdrmediumseverityalertcount: {}
+      xdrnetworkartifacts: {}
+      xdrnotes: {}
+      xdrresolvecomment: {}
+      xdrstatus: {}
+      xdrurl: {}
+      xdrusercount: {}
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1430,
+          "y": 1390
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+  "21":
+    id: "21"
+    taskid: c9aa055b-743d-46bf-85ef-4bf68ed4a5ff
+    type: regular
+    task:
+      id: c9aa055b-743d-46bf-85ef-4bf68ed4a5ff
+      version: -1
+      name: Extract Indicators Email
+      description: commands.local.cmd.extract.indicators
+      script: Builtin|||extractIndicators
+      type: regular
+      iscommand: true
+      brand: Builtin
+    nexttasks:
+      '#none#':
+      - "31"
+    scriptarguments:
+      entryID:
+        complex:
+          root: File
+          filters:
+          - - operator: isEqualString
+              left:
+                value:
+                  simple: File.Extension
+                iscontext: true
+              right:
+                value:
+                  simple: eml
+            - operator: isEqualString
+              left:
+                value:
+                  simple: File.Extension
+                iscontext: true
+              right:
+                value:
+                  simple: EML
+            - operator: isEqualString
+              left:
+                value:
+                  simple: File.Extension
+                iscontext: true
+              right:
+                value:
+                  simple: msg
+            - operator: isEqualString
+              left:
+                value:
+                  simple: File.Extension
+                iscontext: true
+              right:
+                value:
+                  simple: MSG
+          accessor: EntryID
+      filePath: {}
+      investigationID: {}
+      text: {}
+      using:
+        simple: InnerServicesModule
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 1565
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+  "22":
+    id: "22"
+    taskid: b249bd05-1c98-47f9-859f-ef2240709aa6
+    type: regular
+    task:
+      id: b249bd05-1c98-47f9-859f-ef2240709aa6
+      version: -1
+      name: Enrich IPv6
+      description: A context script for IP entities
+      scriptName: IPReputation
+      type: regular
+      iscommand: false
+      brand: Builtin
+    nexttasks:
+      '#none#':
+      - "28"
+    scriptarguments:
+      ip:
+        simple: ${ExtractedIndicators.IPv6}
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 797.5,
+          "y": 2410
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+  "23":
+    id: "23"
+    taskid: 882557fd-c05e-4573-8dff-0ef2a451f0ee
+    type: regular
+    task:
+      id: 882557fd-c05e-4573-8dff-0ef2a451f0ee
+      version: -1
+      name: Enrich IPv4
+      description: A context script for IP entities
+      scriptName: IPReputation
+      type: regular
+      iscommand: false
+      brand: Builtin
+    nexttasks:
+      '#none#':
+      - "29"
+    scriptarguments:
+      ip:
+        simple: ${ExtractedIndicators.IP}
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1022.5,
+          "y": 2760
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+  "24":
+    id: "24"
+    taskid: f6146875-c025-40b4-83a1-7bb699381f8b
+    type: regular
+    task:
+      id: f6146875-c025-40b4-83a1-7bb699381f8b
+      version: -1
+      name: Enrich Domains
+      description: A context script for Domain entities
+      scriptName: DomainReputation
+      type: regular
+      iscommand: false
+      brand: Builtin
+    nexttasks:
+      '#none#':
+      - "5"
+    scriptarguments:
+      domain:
+        simple: ${ExtractedIndicators.Domain}
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 797.5,
+          "y": 3110
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+  "25":
+    id: "25"
+    taskid: ee83adfc-0eb3-4aa5-8af3-69595a012365
+    type: regular
+    task:
+      id: ee83adfc-0eb3-4aa5-8af3-69595a012365
+      version: -1
+      name: Manual Attachment Review
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "21"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 1390
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+  "26":
+    id: "26"
+    taskid: 079b0c84-ef4e-456a-8c62-35c68d8d50f5
+    type: condition
+    task:
+      id: 079b0c84-ef4e-456a-8c62-35c68d8d50f5
+      version: -1
+      name: Are there URL indicators ?
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#default#':
+      - "27"
+      "yes":
+      - "13"
+    separatecontext: false
+    conditions:
+    - label: "yes"
+      condition:
+      - - operator: greaterThan
+          left:
+            value:
+              complex:
+                root: ${ExtractedIndicators
+                accessor: URL}
+                transformers:
+                - operator: count
+            iscontext: true
+          right:
+            value:
+              simple: "0"
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 1885
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+  "27":
+    id: "27"
+    taskid: 99a9665f-e683-44be-84a5-4bc6beff36c3
+    type: condition
+    task:
+      id: 99a9665f-e683-44be-84a5-4bc6beff36c3
+      version: -1
+      name: Are there IPv6 Indicators ?
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#default#':
+      - "28"
+      "yes":
+      - "22"
+    separatecontext: false
+    conditions:
+    - label: "yes"
+      condition:
+      - - operator: greaterThan
+          left:
+            value:
+              complex:
+                root: ${ExtractedIndicators
+                accessor: IPv6}
+                transformers:
+                - operator: count
+            iscontext: true
+          right:
+            value:
+              simple: "0"
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 2235
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+  "28":
+    id: "28"
+    taskid: 3ae9a8ad-c9db-4d70-8e77-165e37081a3f
+    type: condition
+    task:
+      id: 3ae9a8ad-c9db-4d70-8e77-165e37081a3f
+      version: -1
+      name: Are there IPv4 Indicators ?
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#default#':
+      - "29"
+      "yes":
+      - "23"
+    separatecontext: false
+    conditions:
+    - label: "yes"
+      condition:
+      - - operator: greaterThan
+          left:
+            value:
+              complex:
+                root: ${ExtractedIndicators
+                accessor: IP}
+                transformers:
+                - operator: count
+            iscontext: true
+          right:
+            value:
+              simple: "0"
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 2585
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+  "29":
+    id: "29"
+    taskid: 93a2297d-3872-4f1e-8263-706635637af5
+    type: condition
+    task:
+      id: 93a2297d-3872-4f1e-8263-706635637af5
+      version: -1
+      name: Are there domain indicators ?
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#default#':
+      - "5"
+      "yes":
+      - "24"
+    separatecontext: false
+    conditions:
+    - label: "yes"
+      condition:
+      - - operator: greaterThan
+          left:
+            value:
+              complex:
+                root: ExtractedIndicators
+                transformers:
+                - operator: count
+            iscontext: true
+          right:
+            value:
+              simple: "0"
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 2935
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+  "30":
+    id: "30"
+    taskid: 828b1bba-3c06-4a7e-80c1-99406870aaf9
+    type: title
+    task:
+      id: 828b1bba-3c06-4a7e-80c1-99406870aaf9
+      version: -1
+      name: Inspect Attachments and Extract Indicators
+      type: title
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "14"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 895
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+  "31":
+    id: "31"
+    taskid: 4bff7490-22f6-490d-8cfa-f8008f786167
+    type: title
+    task:
+      id: 4bff7490-22f6-490d-8cfa-f8008f786167
+      version: -1
+      name: Enrich Indicators
+      type: title
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "26"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 1740
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 3300,
+        "width": 1760,
+        "x": 50,
+        "y": 50
+      }
+    }
+  }
+inputs: []
+outputs: []
+sourceplaybookid: 6b7f8992-ac7e-4086-8a49-7a89a748b950
